@@ -20,8 +20,8 @@ def pickup_form():
 
 @app.route('/search', method='POST')
 def search_packages():
-    key = request.forms.get('key', '').strip()
-    mode = request.forms.get('mode', 'phone')
+    key = request.forms.getunicode('key', '').strip()
+    mode = request.forms.getunicode('mode', 'phone')
 
     if not key:
         return template('pickup', packages=[], search_key=key, message='请输入搜索内容', mode=mode)
@@ -70,8 +70,8 @@ def search_packages():
 @app.route('/verify', method='POST')
 def verify_and_pickup():
     pkg_ids = request.forms.getall('pkg_ids')
-    verify_key = request.forms.get('verify_key', '').strip()
-    verify_mode = request.forms.get('verify_mode', 'phone')
+    verify_key = request.forms.getunicode('verify_key', '').strip()
+    verify_mode = request.forms.getunicode('verify_mode', 'phone')
 
     if not pkg_ids:
         return template('pickup', packages=[], search_key=verify_key,
@@ -117,9 +117,9 @@ def verify_and_pickup():
 @app.route('/api/verify')
 def api_verify():
     response.content_type = 'application/json'
-    pkg_id = request.query.get('pkg_id')
-    phone_tail = request.query.get('phone_tail')
-    pickup_code = request.query.get('pickup_code')
+    pkg_id = request.query.getunicode('pkg_id')
+    phone_tail = request.query.getunicode('phone_tail')
+    pickup_code = request.query.getunicode('pickup_code')
     if not pkg_id:
         return json.dumps({'ok': False, 'msg': '缺少包裹ID'}, ensure_ascii=False)
     conn = get_conn()

@@ -27,12 +27,12 @@ def arrival_form():
 
 @app.route('/add', method='POST')
 def add_package():
-    tracking_no = request.forms.get('tracking_no', '').strip()
-    phone_tail = request.forms.get('phone_tail', '').strip()
-    company = request.forms.get('company', '').strip()
-    arrival_date = request.forms.get('arrival_date', '').strip()
-    shelf_no = request.forms.get('shelf_no', '').strip()
-    shelf_layer = request.forms.get('shelf_layer', '').strip()
+    tracking_no = request.forms.getunicode('tracking_no', '').strip()
+    phone_tail = request.forms.getunicode('phone_tail', '').strip()
+    company = request.forms.getunicode('company', '').strip()
+    arrival_date = request.forms.getunicode('arrival_date', '').strip()
+    shelf_no = request.forms.getunicode('shelf_no', '').strip()
+    shelf_layer = request.forms.getunicode('shelf_layer', '').strip()
 
     if not all([tracking_no, phone_tail, company, arrival_date, shelf_no, shelf_layer]):
         return _arrival_page_with_msg('请填写所有字段')
@@ -89,7 +89,7 @@ def add_package():
 @app.route('/api/search')
 def api_search():
     response.content_type = 'application/json'
-    q = request.query.get('q', '').strip()
+    q = request.query.getunicode('q', '').strip()
     if not q:
         return json.dumps([])
     conn = get_conn()

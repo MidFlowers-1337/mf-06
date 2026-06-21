@@ -80,12 +80,8 @@
                 </div>
                 <div class="form-group">
                     <label>预估运费（元）</label>
-                    % if shipment:
-                    <input type="text" name="fee" value="{{shipment['fee']}}" readonly class="fee-display">
-                    % else:
-                    <input type="text" id="fee_display" readonly class="fee-display" placeholder="自动计算">
-                    <input type="hidden" name="fee" id="fee_hidden">
-                    % end
+                    <input type="text" id="fee_display" readonly class="fee-display" value="{{str(shipment['fee']) + ' 元' if shipment else ''}}" placeholder="自动计算">
+                    <input type="hidden" name="fee" id="fee_hidden" value="{{shipment['fee'] if shipment else ''}}">
                 </div>
             </div>
 

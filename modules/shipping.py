@@ -35,20 +35,20 @@ def shipping_form():
 
 @app.route('/calc_fee', method='POST')
 def calc_fee():
-    weight_str = request.forms.get('weight', '')
-    company = request.forms.get('company', COMPANIES[0])
+    weight_str = request.forms.getunicode('weight', '')
+    company = request.forms.getunicode('company', COMPANIES[0])
     try:
         weight = float(weight_str)
     except ValueError:
         return template('shipping', companies=COMPANIES, shipment=None, message='重量必须是数字')
     fee = calculate_fee(weight, company)
     shipment = {
-        'sender_name': request.forms.get('sender_name', ''),
-        'sender_phone': request.forms.get('sender_phone', ''),
-        'sender_addr': request.forms.get('sender_addr', ''),
-        'receiver_name': request.forms.get('receiver_name', ''),
-        'receiver_phone': request.forms.get('receiver_phone', ''),
-        'receiver_addr': request.forms.get('receiver_addr', ''),
+        'sender_name': request.forms.getunicode('sender_name', ''),
+        'sender_phone': request.forms.getunicode('sender_phone', ''),
+        'sender_addr': request.forms.getunicode('sender_addr', ''),
+        'receiver_name': request.forms.getunicode('receiver_name', ''),
+        'receiver_phone': request.forms.getunicode('receiver_phone', ''),
+        'receiver_addr': request.forms.getunicode('receiver_addr', ''),
         'weight': weight,
         'company': company,
         'fee': fee
@@ -59,15 +59,15 @@ def calc_fee():
 
 @app.route('/confirm', method='POST')
 def confirm_shipment():
-    sender_name = request.forms.get('sender_name', '').strip()
-    sender_phone = request.forms.get('sender_phone', '').strip()
-    sender_addr = request.forms.get('sender_addr', '').strip()
-    receiver_name = request.forms.get('receiver_name', '').strip()
-    receiver_phone = request.forms.get('receiver_phone', '').strip()
-    receiver_addr = request.forms.get('receiver_addr', '').strip()
-    weight_str = request.forms.get('weight', '')
-    company = request.forms.get('company', '').strip()
-    fee_str = request.forms.get('fee', '')
+    sender_name = request.forms.getunicode('sender_name', '').strip()
+    sender_phone = request.forms.getunicode('sender_phone', '').strip()
+    sender_addr = request.forms.getunicode('sender_addr', '').strip()
+    receiver_name = request.forms.getunicode('receiver_name', '').strip()
+    receiver_phone = request.forms.getunicode('receiver_phone', '').strip()
+    receiver_addr = request.forms.getunicode('receiver_addr', '').strip()
+    weight_str = request.forms.getunicode('weight', '')
+    company = request.forms.getunicode('company', '').strip()
+    fee_str = request.forms.getunicode('fee', '')
 
     required = [sender_name, sender_phone, sender_addr, receiver_name, receiver_phone, receiver_addr, weight_str, company]
     if not all(required):
@@ -133,8 +133,8 @@ def view_label(ship_id):
 def api_calc_fee():
     response.content_type = 'application/json'
     try:
-        weight = float(request.query.get('weight', '0'))
-        company = request.query.get('company', '')
+        weight = float(request.query.getunicode('weight', '0'))
+        company = request.query.getunicode('company', '')
     except ValueError:
         return json.dumps({'fee': 0}, ensure_ascii=False)
     return json.dumps({'fee': calculate_fee(weight, company)}, ensure_ascii=False)

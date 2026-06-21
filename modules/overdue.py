@@ -89,7 +89,7 @@ def remind_all():
     conn.commit()
     conn.close()
 
-    return template('overdue', packages=[], OVERDUE_DAYS=OVERDUE_DAYS,
+    return template('overdue', packages=overdue, OVERDUE_DAYS=OVERDUE_DAYS,
                     message=f'已向全部 {sent_count} 个超期包裹发送取件提醒')
 
 
